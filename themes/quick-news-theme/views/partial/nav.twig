@@ -1,0 +1,68 @@
+<div class="container-fluid bg-primary">
+	<div class="container">
+		<nav
+			class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+			{# Outputs the site name as the brand link. 'site' comes from Timber’s global context and provides site-wide info like link and name. #}
+			<a class="navbar-brand" href="{{ site.link }}">
+				<span class="font-weight-bold">{{ site.name }}</span>
+			</a>
+
+			<div class="collapse navbar-collapse">
+				<ul
+					class="navbar-nav mr-auto">
+
+					{# Loops through the navigation menu items. 'menu' is a controller variable created in PHP (e.g. Timber\Menu). #}
+					{% for item in menu.get_items %}
+
+						{# Checks if the current menu item has child items (a submenu). #}
+						{% if item.children %}
+
+							{# Outputs a parent nav item as a dropdown. 'item.current_item_ancestor' adds the 'active' class if the item is an ancestor of the current page. #}
+							<li class="nav-item dropdown {{ item.current_item_ancestor ? 'active' }}">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									{{ item.title }}
+								</a>
+
+								<div
+									class="dropdown-menu" aria-labelledby="navbarDropdown">
+									{# Loops through the child menu items to display them in the dropdown. #}
+									{% for child in item.children %}
+										{# Outputs each child as a dropdown link. Adds 'active' class if the child is the current page. #}
+										<a class="dropdown-item {{ child.current ? 'active' }}" href="{{ child.link }}">{{ child.title }}</a>
+									{% endfor %}
+								</div>
+							</li>
+
+						{% else %}
+							{# Outputs a regular nav item if it has no children. #}
+							<li
+								class="nav-item">
+								{# Adds 'active' class if this item is the current page. #}
+								<a class="nav-link {{ item.current ? 'active' }}" href="{{ item.link }}">{{ item.title }}</a>
+							</li>
+						{% endif %}
+
+					{% endfor %}
+				</ul>
+
+				{# Static Bootstrap search form included in the nav bar. This isn’t connected to WordPress search unless customized in PHP. #}
+				<form class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+				</form>
+			</div>
+		</nav>
+	</div>
+</div>
+
+{# 
+  Notes:
+
+  site → comes from Timber’s global context (Timber::context()).
+
+  menu.get_items → comes from new Timber\Menu('menu_location') set in your PHP controller.
+
+  Active states (item.current, item.current_item_ancestor) help highlight the current page or ancestor in the nav.
+
+ #}

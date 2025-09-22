@@ -1,0 +1,15 @@
+{# Checks if the variable 'list' exists and has values passed into the template. If it does, the following code will run. #}
+{% if list %}
+
+	<span
+		class="font-weight-light text-secondary ml-2">
+		{# Outputs the 'label' variable, usually used as a heading or descriptor for the list. #}
+		{{label}}
+	</span>
+
+	{# Loops through each item in the 'list' variable. Each item represents a 'term' object with its own link and name. Outputs a clickable badge for every term. #}
+	{% for term in list %}
+		<a href="{{term.link}}" class="badge btn btn-light">{{term.name}}</a>
+	{% endfor %}
+
+{% endif %}
