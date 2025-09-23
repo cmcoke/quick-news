@@ -1,0 +1,9 @@
+{% macro header(image, message) %}
+	<div class="container-fluid py-5" style="background-image: url({{ image }}); background-size: cover">
+		<div class="container py-3">
+			<h1 class="text-white text-center font-weight-bold">
+				{{ message }}
+			</h1>
+		</div>
+	</div>
+{% endmacro %}

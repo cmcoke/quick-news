@@ -1,0 +1,43 @@
+{% extends "base.twig" %}
+
+{% block subheader %}
+	{{ block('subheader', 'pages/news.twig') }}
+	{% if post.breaking %}
+		{% from 'partial/macros.twig' import header %}
+		{{ header( theme.link ~ '/images/breaking_news.jpg', 'Breaking News!') }}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col">
+
+			<h2 class="font-weight-bold">{{ post.title }}</h2>
+
+			<span class="badge badge-light">
+				by,
+				{{ post.author.display_name }},
+				{{ post.date }}
+			</span>
+
+			{% set word_count = post.content|split(' ')|length %}
+			{% set reading_time = (word_count / art)|round(0, 'ceil') %}
+
+			<span class="badge badge-light">
+				Rading time:
+				{{ reading_time }}
+				minute{{ reading_time > 1 ? 's' }}
+			</span>
+
+			<img src="{{ theme.link }}/images/news/{{ post.slug }}.jpg" width="400px" class="mt-2 ml-4 mb-3 rounded float-right">
+
+			<div class="text-justify mt-3">
+				{{ post.content }}
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}

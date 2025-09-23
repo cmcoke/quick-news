@@ -1,44 +1,52 @@
 {% extends "base.twig" %}
 
-{% block content %}
-
-	{# Loops through all posts provided by the controller variable 'posts'. Each iteration gives access to a single 'post' object. #}
-	{% for post in posts %}
-		<div class="row py-3 border-bottom">
-			<div
-				class="col-2">
-				{# Displays a featured image for the post. The image is pulled from the theme's images/news directory and uses the post's slug as the filename. #}
-				<img src="{{theme.link}}/images/news/{{post.slug}}.jpg" width="100%" class="rounded">
-			</div>
-
-			<div class="col-10">
-				<h5>
-					<a
-						href="{{post.link}}">
-						{# Outputs the post's title inside a link to the single post page. #}
-						<span class="text-dark">{{post.title}}</span>
-					</a>
-				</h5>
-
-				{# Includes the 'terms.twig' partial to display the post's categories. Passes the category terms as 'list' and sets 'label' to 'Category'. #}
-				{{include('partial/terms.twig', {list: post.terms('category'), label: 'Category'}) }}
-
-				{# Includes the 'terms.twig' partial to display the post's tags. Passes the tag terms as 'list' and sets 'label' to 'Tags'. #}
-				{{include('partial/terms.twig', {list: post.terms('post_tag'), label: 'Tags'}) }}
-
-				{# Includes the 'terms.twig' partial to display the post's sponsors. Passes the sponsor terms as 'list' and sets 'label' to 'Sponsor'. #}
-				{{include('partial/terms.twig', {list: post.terms('sponsor'), label: 'Sponsor'}) }}
-
-				<div
-					class="mt-2">
-					{# Outputs the post's content but trims it down to 50 words using the 'excerpt' filter. #}
-					{{post.content|excerpt(50)}}
-
-					{# Provides a 'Read more' button linking to the full post. #}
-					<a href="{{post.link}}" class="badge btn btn-light">Read more</a>
+{% block subheader %}
+	<div class="container-fluid py-2 bg-light border-bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-4">
+					{% for cat in categories %}
+						{% if cat.name == current.name or cat.name in post.terms('categories') %}
+							<a role="button" href="/category/{{ cat.slug }}" class="btn btn-success btn-sm">
+								{{ cat.name }}
+								<span class="badge badge-light">{{ current.count }}</span>
+							</a>
+						{% else %}
+							<a role="button" href="/category/{{ cat.slug }}" class="btn btn-outline-success btn-sm">
+								{{ cat.name }}
+							</a>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="col-8 text-right">
+					{% for tag in tags %}
+						{% if tag.name == current.name or tag.name in post.terms('post_tag') %}
+							<a role="button" href="/tag/{{ tag.slug }}" class="btn btn-info btn-sm">
+								{{ tag.name }}
+								<span class="badge badge-light">{{ current.count }}</span>
+							</a>
+						{% else %}
+							<a role="button" href="/tag/{{ tag.slug }}" class="btn btn-outline-info btn-sm">
+								{{ tag.name }}
+							</a>
+						{% endif %}
+					{% endfor %}
 				</div>
 			</div>
 		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+
+	{# Loops through all posts provided by the controller variable 'posts'. Each iteration gives access to a single 'post' object. #}
+	{% for post in posts %}
+		{{ include('partial/news-teaser.twig') }}
 	{% endfor %}
+
+	{{include('partial/pagination.twig')}}
+
+	<div class="container py-5 my-5"></div>
 
 {% endblock %}

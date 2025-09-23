@@ -1,9 +1,17 @@
 {# This file demonstrates using most of the index.twig template and modifying 
    just a small part. See `search.twig` for an example of another approach #}
 
-{% extends "index.twig" %}
+{% extends 'base.twig' %}
+
+{% block subheader %}
+	{{ block('subheader', 'pages/news.twig') }}
+{% endblock %}
 
 {% block content %}
-  <h3>This is my archive</h3>
-  {{ parent() }}
+
+	{% for post in posts %}
+		{{ include('partial/news-teaser.twig') }}
+	{% endfor %}
+	{{ include('partial/pagination.twig') }}
+
 {% endblock %}

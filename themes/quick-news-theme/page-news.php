@@ -24,18 +24,32 @@
 
 $context = Timber::context();
 
+
+global $paged;
+
+if (!isset($paged) || !$paged) {
+  $paged = 1;
+}
+
+
 // Create a custom WP_Query array that fetches 12 blog posts 
 // ordered by their ID in descending order (newest first).
 $query = array(
   'post_type' => 'post',
   'orderby' => 'ID',
   'order' => 'DESC',
-  'posts_per_page' => '12'
+  'posts_per_page' => '12',
+  'paged' => $paged,
 );
 
 // Add the custom query results to the Timber context as 'posts',
 // making them available inside the Twig template (looping through posts).
 $context['posts'] = Timber::get_posts($query);
+
+
+$context['categories']  = get_terms(array('taxonomy' => 'category'));
+$context['tags']        = get_terms(array('taxonomy' => 'post_tag'));
+
 
 $timber_post     = Timber::get_post();
 $context['post'] = $timber_post;
