@@ -24,24 +24,14 @@
 
 $context = Timber::context();
 
+$query = array(
+  'post_type' => 'person',
+  'posts_per_page' => '10'
+
+);
+
+$context['people'] = Timber::get_posts($query);
+
 $timber_post     = Timber::get_post();
 $context['post'] = $timber_post;
-
-// Handle the top_story ACF field
-$top_story = get_field('top_story', $timber_post->ID);
-if ($top_story) {
-  // Convert to Timber\Post object
-  $context['top_story'] = Timber::get_post($top_story);
-} else {
-  $context['top_story'] = null; // Avoid errors in Twig
-}
-
-// Handle the featured_news ACF field (array of posts)
-$featured_news = get_field('featured_news', $timber_post->ID);
-if ($featured_news) {
-  $context['featured_news'] = Timber::get_posts($featured_news);
-} else {
-  $context['featured_news'] = [];
-}
-
 Timber::render(array('pages/' . $timber_post->post_name . '.twig', 'page.twig'), $context);

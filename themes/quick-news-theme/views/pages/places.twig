@@ -1,0 +1,34 @@
+{% extends 'base.twig' %}
+
+{% block subheader %}
+	{{ block('subheader', 'pages/people.twig') }}
+{% endblock %}
+
+{% block content %}
+
+	{# Loop through all posts in the selected taxonomy term #}
+	{% for place in place_term.posts %}
+		<div class="row mt-2">
+			<div class="col-2">
+				<img src="{{ place.thumbnail.src('large') }}" width="100%" class="rounded">
+			</div>
+			<div class="col-10">
+				<h5>{{ place.title }}</h5>
+				{{ place.content|excerpt(30) }}
+
+				<div
+					class="mt-4">
+					{# Loop through all people and show those associated with this place #}
+					{% if place_people_map[place.ID] is defined %}
+						{% for person in place_people_map[place.ID] %}
+							<a href="{{ person.link }}">
+								<img src="{{ person.thumbnail.src('thumbnail')|resize('70') }}" class="rounded-circle border dark">
+							</a>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}

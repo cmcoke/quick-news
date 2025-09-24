@@ -1,0 +1,48 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+
+	<div
+		class="row">
+
+		<!-- Left column -->
+		<div
+			class="col-8">
+
+			<!-- Top story -->
+			{% if top_story %}
+				<div class="row rounded pt-2">
+					<div class="col-4">
+						<img width="100%" src="{{ theme.link }}/images/news/{{ top_story.slug }}.jpg" class="mt-2 mb-3 rounded">
+					</div>
+					<div class="col-8">
+						<h3 class="font-weight-bold">
+							<a href="{{ top_story.link }}" class="text-dark">{{ top_story.title }}</a>
+						</h3>
+						{{ top_story.content|excerpt(50) }}
+						<a href="{{ top_story.link }}" class="badge badge-light">Read more</a>
+					</div>
+				</div>
+			{% endif %}
+
+			<!-- Featured news -->
+			{% if featured_news %}
+				<div class="row mt-4">
+					{% for news in featured_news %}
+						<div class="col">
+							<img width="100%" src="{{ theme.link }}/images/news/{{ news.slug }}.jpg" class="mt-2 mb-3 rounded">
+							<h6 class="font-weight-bold">
+								<a href="{{ news.link }}" class="text-dark">{{ news.title }}</a>
+							</h6>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+
+		</div>
+
+		<!-- Right column -->
+		<div class="col-4"></div>
+	</div>
+
+{% endblock %}

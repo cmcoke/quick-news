@@ -14,8 +14,17 @@ $context         = Timber::context();
 $timber_post     = Timber::get_post();
 $context['post'] = $timber_post;
 
-$context['categories']  = get_terms(array('taxonomy' => 'category'));
-$context['tags']        = get_terms(array('taxonomy' => 'post_tag'));
+
+/**
+ * Get the current logged-in user
+ *
+ * - We cannot use `new Timber\User()` directly because its constructor is protected.
+ * - Instead, Timber provides the static method `Timber::get_user()`, which safely
+ *   returns the current logged-in user as a `Timber\User` object.
+ * - If no user is logged in, it will return `null`.
+ */
+$context['user'] = Timber::get_user();
+
 
 // Get the "favourite_places" ACF field (this might return null, array of IDs, or array of WP_Post objects)
 $fav_places = get_field('favourite_places');
@@ -29,6 +38,14 @@ if ($fav_places) {
   // This prevents errors or notices when Twig tries to loop over the variable
   $context['favourite_places'] = [];
 }
+
+// get 5 random people
+$query = array(
+  'post_type' => 'person',
+  'orderby' => 'rand',
+  'posts_per_page' => '5'
+);
+$context['people'] =  Timber::get_posts($query);
 
 if (post_password_required($timber_post->ID)) {
   Timber::render('single-password.twig', $context);

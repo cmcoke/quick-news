@@ -1,0 +1,46 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-3">
+			<img src="{{ post.thumbnail.src('large') }}" width="100%" class="rounded">
+		</div>
+		<div class="col-9 text-left">
+			<h2 class="font-weight-bold border-bottom border-secondary pb-4">
+				{{ post.title }}
+			</h2>
+			<div class="font-italic font-weight-light mt-4">
+				{{user.can('read') ? post.content : 'You must logged in to see this'}}
+			</div>
+			<div>
+
+				{% if favourite_places %}
+					<h5 class="mt-4">Favourite places:</h5>
+					{% for place in favourite_places %}
+						<span class="badge badge-secondary">{{ place.title }}</span>
+					{% endfor %}
+				{% endif %}
+
+			</div>
+		</div>
+	</div>
+
+	<hr>
+	<h3 class="text-center text-secondary font-weight-light">See also:</h3>
+	<div class="row mt-5">
+
+		{% for person in people %}
+			{% if person.id != post.id %}
+				<div class="col text-center text-secondary mb-5">
+					<img src="{{ person.thumbnail.src('thumbnail') }}" class="rounded-circle border border-dark">
+					<h5 class="pt-2 text-secondary">
+						<a href="{{ person.link }}">{{ person.title }}</a>
+					</h5>
+				</div>
+			{% endif %}
+		{% endfor %}
+
+	</div>
+
+{% endblock %}
