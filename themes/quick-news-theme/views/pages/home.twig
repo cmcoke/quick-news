@@ -2,8 +2,9 @@
 
 {% block content %}
 
-	<div
-		class="row">
+	<div class="row">
+
+		{% set featured_list = [] %}
 
 		<!-- Left column -->
 		<div
@@ -23,6 +24,9 @@
 						<a href="{{ top_story.link }}" class="badge badge-light">Read more</a>
 					</div>
 				</div>
+
+				{% set featured_list = featured_list|merge([top.id]) %}
+
 			{% endif %}
 
 			<!-- Featured news -->
@@ -35,14 +39,62 @@
 								<a href="{{ news.link }}" class="text-dark">{{ news.title }}</a>
 							</h6>
 						</div>
+
+						{% set featured_list = featured_list|merge([news.id]) %}
 					{% endfor %}
 				</div>
 			{% endif %}
 
+			<!-- Promoted people -->
+			<hr>
+			<div class="row mt-3">
+				{% for person in promoted_people.posts({ posts_per_page: 3, orderby: 'rand'}) %}
+					<div class="col-4">
+						<div class="card bg-success text-white border-light">
+							<img src="{{ person.thumbnail.src('full') }}" class="card-img-top">
+							<div class="card-body">
+								<h5 class="card-title font-weight-bold">{{ person.title }}</h5>
+								<p class="card-text">{{ person.content|excerpt(5) }}</p>
+								<a href="{{ person.link }}" class="btn btn-light">Visit profile</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+
 		</div>
 
 		<!-- Right column -->
-		<div class="col-4"></div>
+		<div class="col-4">
+
+			<div>
+				{{ include('partial/latest-news.twig', {
+          label: 'Events',
+          color: 'primary',
+          term: events
+        }) }}
+
+				{{ include('partial/latest-news.twig', {
+          label: 'Sport',
+          color: 'warning',
+          term: sport
+        }) }}
+
+				{{ include('partial/latest-news.twig', {
+          label: 'Animals',
+          color: 'success',
+          term: animals
+        }) }}
+
+				{{ include('partial/latest-news.twig', {
+          label: 'Architecture',
+          color: 'info',
+          term: architecture
+        }) }}
+			</div>
+
+		</div>
 	</div>
 
 {% endblock %}

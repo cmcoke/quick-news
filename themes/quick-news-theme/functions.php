@@ -23,5 +23,6 @@ add_filter('timber/context', 'add_to_context');
 function add_to_context($context)
 {
   $context['art'] = 200;
+  $context['secondary_menu'] = Timber::get_menu('secondary');
   return $context;
 }

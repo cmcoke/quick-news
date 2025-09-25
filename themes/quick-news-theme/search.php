@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Search results page
  *
@@ -9,10 +10,11 @@
  * @since   Timber 0.1
  */
 
-$templates = array( 'search.twig', 'archive.twig', 'index.twig' );
+$templates = array('search.twig', 'archive.twig', 'index.twig');
 
 $context          = Timber::context();
 $context['title'] = 'Search results for ' . get_search_query();
+$context['query'] = get_search_query();
 $context['posts'] = Timber::get_posts();
 
-Timber::render( $templates, $context );
+Timber::render($templates, $context);

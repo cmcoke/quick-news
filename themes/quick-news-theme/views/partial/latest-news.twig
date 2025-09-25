@@ -1,0 +1,19 @@
+{% set featured_counter = 0 %}
+{% for news in attribute(term, 'posts', [5]) %}
+	{% if news.id in featured_list %}
+		{% set featured_counter = featured_counter + 1 %}
+	{% endif %}
+{% endfor %}
+
+<div class="pt-2 pb-0 mb-3 border-bottom border-{{ color }}">
+	<h5 class="text-{{ color }} font-weight-bold">
+		{{ label }}
+	</h5>
+</div>
+{% for news in attribute(term, 'posts', [5 + featured_counter]) %}
+	{% if news.id not in featured_list %}
+		<h6>
+			<a href="{{ news.link }}" class="text-secondary">{{ news.title|excerpt(6) }}</a>
+		</h6>
+	{% endif %}
+{% endfor %}
